@@ -1,26 +1,17 @@
 
-window.addEventListener('message', function(e) {
-	$("#container").stop(false, true);
-    if (e.data.displayWindow == 'true') {
-        $("#container").css('display', 'flex');
-  		
-        $("#container").animate({
-        	bottom: "25%",
-        	opacity: "1.0"
-        	},
-        	700, function() {
+var audioPlayer = null;
+// Listen for NUI Messages.
+window.addEventListener('message', function(event) {
+	// Check for playSound transaction
+	if (event.data.transactionType == "playSound") {
+	
+	  if (audioPlayer != null) {
+		audioPlayer.pause();
+	  }
 
-        });
+	  audioPlayer = new Audio("./sounds/" + event.data.transactionFile + ".ogg");
+	  audioPlayer.volume = event.data.transactionVolume;
+	  audioPlayer.play();
 
-    } else {
-    	$("#container").animate({
-        	bottom: "-50%",
-        	opacity: "0.0"
-        	},
-        	700, function() {
-        		$("#container").css('display', 'none');
-	         	
-        });
-    }
+	}
 });
-
